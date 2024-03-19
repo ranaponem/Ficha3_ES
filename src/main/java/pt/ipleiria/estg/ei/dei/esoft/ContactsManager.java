@@ -3,6 +3,8 @@ package pt.ipleiria.estg.ei.dei.esoft;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 public class ContactsManager {
     private List<Contact> contacts;
@@ -37,22 +39,29 @@ public class ContactsManager {
         return output;
     }
     public void addContact(Contact contact, String... labels) {
-        if (!contacts.contains(contact)) contacts.add(contact);
+        Predicate<Contact> duplicate = c -> Objects.equals(c.getPhone(),
+                contact.getPhone()) && Objects.equals(c.getEmail(), contact.getEmail());
+        if (contacts.stream().noneMatch(duplicate)) contacts.add(contact);
         if (labels.length == 0) return;
         for (var label : labels) {
             if (!this.labels.containsKey(label)) {
                 this.labels.put(label, new LinkedList<>());
             }
             var contactsLabel = this.labels.get(label);
-            if (!contactsLabel.contains(contact)) {
+            if (!contacts.stream().noneMatch(duplicate)) {
                 contactsLabel.add(contact);
             }
         }
     }
     public void removeContact(Contact contact) {
-        // TODO remove the contact
+        contacts.remove(contact);
+        labels.values().forEach(contacts -> contacts.remove(contact));
     }
     public int size() {
         return contacts.size();
+    }
+
+    public boolean isEmpty() {
+        return contacts.isEmpty();
     }
 }

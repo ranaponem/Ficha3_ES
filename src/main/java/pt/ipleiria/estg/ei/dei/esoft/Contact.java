@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.ei.dei.esoft;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Contact {
     private String firstName;
@@ -59,5 +60,21 @@ public class Contact {
     }
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Contact)) return false;
+        var another = (Contact) o;
+        if (!Objects.equals(this.firstName, another.firstName)) return false;
+        if (!Objects.equals(this.lastName, another.lastName)) return false;
+        if (!Objects.equals(this.email, another.email)) return false;
+        if (!Objects.equals(this.phone, another.phone)) return false;
+        if (!Objects.equals(this.birthday, another.birthday)) return false;
+        return true;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, birthday, phone, email);
     }
 }
