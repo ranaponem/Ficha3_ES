@@ -37,8 +37,17 @@ public class ContactsManager {
         return output;
     }
     public void addContact(Contact contact, String... labels) {
-        // TODO add contact and associate it with the labels, if any
-        // DO NOT ALLOW TO ADD DUPLICATED CONTACTS (same phone and/or email)
+        if (!contacts.contains(contact)) contacts.add(contact);
+        if (labels.length == 0) return;
+        for (var label : labels) {
+            if (!this.labels.containsKey(label)) {
+                this.labels.put(label, new LinkedList<>());
+            }
+            var contactsLabel = this.labels.get(label);
+            if (!contactsLabel.contains(contact)) {
+                contactsLabel.add(contact);
+            }
+        }
     }
     public void removeContact(Contact contact) {
         // TODO remove the contact
